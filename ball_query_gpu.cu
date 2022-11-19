@@ -7,7 +7,7 @@
 
 
 __global__ void ball_query_kernel_fast(int b, int n, int m, float radius, int nsample, 
-    const float *__restrict__ new_xyz, const float *__restrict__ xyz, int *__restrict__ idx) {
+    const int16_t *__restrict__ new_xyz, const int16_t *__restrict__ xyz, int *__restrict__ idx) {
     // new_xyz: (B, M, 3)
     // xyz: (B, N, 3)
     // output:
@@ -21,15 +21,15 @@ __global__ void ball_query_kernel_fast(int b, int n, int m, float radius, int ns
     idx += bs_idx * m * nsample + pt_idx * nsample;
 
     float radius2 = radius * radius;
-    float new_x = new_xyz[0];
-    float new_y = new_xyz[1];
-    float new_z = new_xyz[2];
+    int16_t new_x = new_xyz[0];
+    int16_t new_y = new_xyz[1];
+    int16_t new_z = new_xyz[2];
 
     int cnt = 0;
     for (int k = 0; k < n; ++k) {
-        float x = xyz[k * 3 + 0];
-        float y = xyz[k * 3 + 1];
-        float z = xyz[k * 3 + 2];
+        int16_t x = xyz[k * 3 + 0];
+        int16_t y = xyz[k * 3 + 1];
+        int16_t z = xyz[k * 3 + 2];
         float d2 = (new_x - x) * (new_x - x) + (new_y - y) * (new_y - y) + (new_z - z) * (new_z - z);
         if (d2 < radius2){
             if (cnt == 0){
@@ -46,7 +46,7 @@ __global__ void ball_query_kernel_fast(int b, int n, int m, float radius, int ns
 
 
 void ball_query_kernel_launcher_fast(int b, int n, int m, float radius, int nsample, \
-    const float *new_xyz, const float *xyz, int *idx) {
+    const int16_t *new_xyz, const int16_t *xyz, int *idx) {
     // new_xyz: (B, M, 3)
     // xyz: (B, N, 3)
     // output:
