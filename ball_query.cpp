@@ -33,8 +33,8 @@ int ball_query_wrapper_fast(int b, int n, int m, float radius, int nsample,
     at::Tensor new_xyz_tensor, at::Tensor xyz_tensor, at::Tensor idx_tensor) {
     CHECK_INPUT(new_xyz_tensor);
     CHECK_INPUT(xyz_tensor);
-    const float *new_xyz = new_xyz_tensor.data<float>();
-    const float *xyz = xyz_tensor.data<float>();
+    const int16_t *new_xyz = new_xyz_tensor.data<int16_t>();
+    const int16_t *xyz = xyz_tensor.data<int16_t>();
     int *idx = idx_tensor.data<int>();
     
     ball_query_kernel_launcher_fast(b, n, m, radius, nsample, new_xyz, xyz, idx);
